@@ -35,8 +35,8 @@ void FuncN1(Node *first){
 int main(int argc, char *argv[]){
 	int count_chisla = 0;
 	int chisla[10];
-	Node *last=nullptr;
-	Node *first=nullptr;
+	Node *last = nullptr;
+	Node *first = nullptr;
 	bool flag_chisla = false, flag_total = true;
 
 	if (argc == 1){
