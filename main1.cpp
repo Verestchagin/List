@@ -8,7 +8,7 @@ struct Node{
 	Node *next;
 };
 
-void zapolnenie(int chisla[], int count_chisla, Node **first, Node **last) {
+void fill(int chisla[], int count_chisla, Node **first, Node **last) {
 	for(int i = 0; i < count_chisla; i++) {
 		Node *node = new Node{chisla[i], nullptr};
 		if((*last) == nullptr){
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]){
 	}
 	//запись чисел в массив
 	
-	zapolnenie(chisla, count_chisla, &first, &last);
+	fill(chisla, count_chisla, &first, &last);
 	int ch = 0;
 	string ch_exit = "";
 	while ((ch_exit != "y") && (ch_exit != "yes") && (ch_exit != "Y") && (ch_exit != "Yes") && (ch_exit != "YES")){		
