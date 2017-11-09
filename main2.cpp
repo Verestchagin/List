@@ -32,12 +32,22 @@ void FuncN1(Node *first){
 	cout << endl;
 }
 
+void FuncN2(){
+	cout << "Enter new elements" << endl;
+	cin >> new_elements;
+	Node *curr = new Node;
+	curr -> x = x;
+	curr -> next = first;
+	first = curr;
+}
+
 int main(int argc, char *argv[]){
 	int count_chisla = 0;
 	int chisla[10];
-	Node *last=nullptr;
-	Node *first=nullptr;
+	Node *last = nullptr;
+	Node *first = nullptr;
 	bool flag_chisla = false, flag_total = true;
+	string new_elements = "";
 
 	if (argc == 1){
 		cout << "EMPTY LIST" << endl;
