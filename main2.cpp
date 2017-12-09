@@ -1,6 +1,7 @@
 #include <iostream>
+#include <string.h>
 #include <string>
-#include <cstring> 
+#include <limits>
 using namespace std;
 
 struct Node{
@@ -8,139 +9,108 @@ struct Node{
 	Node *next;
 };
 
-void fill(int chisla[], int count_chisla, Node **first, Node **last) {
-	for(int i = 0; i < count_chisla; i++) {
-		Node *node = new Node{chisla[i], nullptr};
-		if((*last) == nullptr){
-			(*last) = node;
-			(*first) = (*last);
-			continue;
-		}
-		(*last) -> next = node;
-		(*last) = node;
-	}
-}
+struct List{
+	Node *first;
+	Node *last;
+};
 
-void FuncN1(Node *first){
-	Node *curr = first;
+void input(List &list, int znachenie){
+	Node *current = new Node{znachenie, nullptr};
+	if (list.first == nullptr)
+		list.first = current;
+	else{
+		if (list.first -> next == nullptr) 
+			list.first -> next = current;
+		if (list.last != nullptr) 
+			list.last -> next = current;
+		list.last = current;
+    }
+}
+void print_list(Node *&current){
 	do{
-		cout << curr -> znachenie;
-		if (curr -> next != nullptr) cout << " -> ";
-		curr = curr -> next;
-	} 
-	while (curr != nullptr);
-	cout << endl;
+		if (current -> next != nullptr)
+			cout << current -> znachenie << " -> ";
+		else
+			cout << current -> znachenie << endl;
+		current = current -> next;
+	} while (current != nullptr);
 }
 
-void FuncN2(){
-	cout << "Enter new elements" << endl;
-	cin >> new_elements;
-	Node *curr = new Node;
-	curr -> x = x;
-	curr -> next = first;
-	first = curr;
+void add_elements(List &list){
+	cout << "Input new elements" << endl;
+	string new_elements;
+	int znachenie;
+	Node *curr = new Node{znachenie, nullptr};
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	getline(cin, new_elements);
+	for (int i = 0; i < new_elements.length(); i++){
+		if (new_elements[i] != ' ')
+			znachenie = znachenie * 10 + new_elements[i] - 48;
+		else{
+			input(list, znachenie);
+			znachenie = 0;
+		}
+		if (i == new_elements.length() - 1)
+			input(list,znachenie);
+	}
 }
 
 int main(int argc, char *argv[]){
-	int count_chisla = 0;
-	int chisla[10];
-	Node *last = nullptr;
-	Node *first = nullptr;
-	bool flag_chisla = false, flag_total = true;
-	string new_elements = "";
-
-	if (argc == 1){
-		cout << "EMPTY LIST" << endl;
-		flag_total = false;
-	}
-	for (int i = 0; i < 10; i++){
-		chisla[i] = 0;
-	}
-	if (argc == 2){
-		for (int i = 0; i < strlen(argv[1]); i++){
-			if ((argv[1][i] >= '0') && (argv[1][i] <= '9')){
-				if (flag_chisla = false){
-					chisla[count_chisla] = argv[1][i] - 48;
-				}
+	int znachenie;
+	List list;
+	list.first = nullptr;
+	list.last = nullptr;
+	Node *current = nullptr;
+	if (argc == 1)
+		cout << "The list is empty" << endl;
+	if (argc > 1){
+		if (argc == 2){
+			for (int i = 0; i < strlen(argv[1]); i++){
+				if ((argv[1][i] >= '0') && (argv[1][i] <= '9'))
+					znachenie = znachenie * 10 + argv[1][i] - 48;
 				else{
-					chisla[count_chisla] = chisla[count_chisla] * 10 + argv[1][i] - 48;
+					if (argv[1][i] == ','){
+						input(list, znachenie);
+						znachenie = 0;
+					}
 				}
-				if (argv[1][i + 1] == ','){
-					count_chisla++;
-					flag_chisla = false;
-				}
-				else{
-					flag_chisla = true;
-				}
+				if (i == strlen(argv[1]) - 1)
+					input(list, znachenie);
 			}
 		}
-		count_chisla++;
-	}
-	if (argc > 2){
-		for (int i = 1; i < argc; i++){
-			for (int k = 0; k < strlen(argv[i]); k++){
-				if ((argv[i][k] >= '0') && (argv[i][k] <= '9')){
-					if (flag_chisla = false){
-						chisla[count_chisla] = argv[i][k] - 48;
-					}
-					else{
-						chisla[count_chisla] = chisla[count_chisla] * 10 + argv[i][k] - 48;
-					}
-					if ((argv[i][k + 1] == ',') || (k + 1 == strlen(argv[i]))){
-						count_chisla++;
-						flag_chisla = false;
-					}
-					else{
-						flag_chisla = true;
-					}
-				}
+		else{
+			for (int i = 0; i < argc - 1; i++){
+				znachenie = atoi(argv[i + 1]);
+				input(list, znachenie);
 			}
 		}
-	}
-	//запись чисел в массив
-	
-	fill(chisla, count_chisla, &first, &last);
-	int ch = 0;
-	string ch_exit = "";
-	while ((ch_exit != "y") && (ch_exit != "yes") && (ch_exit != "Y") && (ch_exit != "Yes") && (ch_exit != "YES")){		
-		while (ch != 7){
-			if (flag_total == false) break;
-			else{
-				cout << endl;
-   				cout << "Select operation:" << endl;
-    				cout << "1.Print list" << endl;
-    				cout << "2.Add elements to the list" << endl;
-    				cout << "3.Delete element" << endl;
-    				cout << "4.Find positions of elements" << endl;
-    				cout << "5.Replace the element on the other" << endl;
-    				cout << "6.Sort the list of elements" << endl;
-    				cout << "7.Close program" << endl;
-    				cin >> ch;
-				switch(ch){
-					case 1:
-						FuncN1(first);
-						break;
-					case 2:
-						break;
-					case 3:
-						break;
-					case 4:
-						break;
-					case 5:
-						break;
-					case 6:
-						break;
-					case 7:
-						cout<<"Do you want to exit?" << endl;
-						cin >> ch_exit;
-						if ((ch_exit == "n") || (ch_exit == "no") || (ch_exit == "N") || (ch_exit == "No") || (ch_exit == "NO")){
-							ch = 0;
-							break;
-						}
-						if ((ch_exit == "y") || (ch_exit == "yes") || (ch_exit == "Y") || (ch_exit == "Yes") || (ch_exit == "YES")) cout << "Good Bye" << endl;
-				}
+		string flag_exit = "no";
+		while ((flag_exit != "y") && (flag_exit != "yes") && (flag_exit != "Yes") && (flag_exit != "YES")){
+			cout << endl;
+			cout << "Select one of the operations:" << endl;
+			cout << "1. Print list" << endl;
+			cout << "2. Add elements to the list" << endl;
+			cout << "3. Delete element" << endl;
+			cout << "4. Find elements' positions" << endl;
+			cout << "5. Replace element" << endl;
+			cout << "6. Sort elements" << endl;
+			cout << "7. End the program" << endl;
+			int ch;
+        		cin >> ch;
+			switch(ch){
+				case 1:
+					current = list.first;
+               		 		print_list(current);
+               	 			current = nullptr;
+					break;
+				case 2:
+					add_elements(list);
+					break;
+				case 7:
+					cout << "Do you want to leave program?" << endl;
+					cin >> flag_exit;
+					break;
 			}
-				
-  		}
+		}
 	}
 }
