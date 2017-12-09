@@ -28,7 +28,7 @@ void input(List &list, int znachenie){
 void print_list(Node *&current){
     do{
         if (current -> next != nullptr)
-            cout << current -> znachenie << "->";
+            cout << current -> znachenie << " -> ";
         else
             cout << current -> znachenie << endl;
         current = current -> next;
